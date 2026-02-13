@@ -6,14 +6,6 @@
 <title>Valentine 💕</title>
 
 <style>
-:root{
-  --pink:#ff4b5c;
-  --pink2:#ff2d55;
-  --shadow:0 20px 60px rgba(0,0,0,.18);
-}
-
-*{box-sizing:border-box;}
-
 body{
   margin:0;
   height:100vh;
@@ -21,98 +13,74 @@ body{
   justify-content:center;
   align-items:center;
   font-family:'Segoe UI',sans-serif;
-  overflow:hidden;
   background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  overflow:hidden;
 }
 
-/* ===== CARD FIX KHÔNG TRÀN ===== */
 .card{
   width:min(520px,92vw);
-  max-height:92vh;              /* giới hạn chiều cao */
-  overflow:auto;                /* nếu dài sẽ cuộn */
-  padding:24px;
-  border-radius:26px;
+  max-height:92vh;
+  overflow:auto;
+  padding:25px;
+  border-radius:25px;
   text-align:center;
-  background:rgba(255,255,255,0.9);
-  backdrop-filter:blur(12px);
-  box-shadow:var(--shadow);
-  animation:fadeIn 0.8s ease;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px);
+  box-shadow:0 20px 50px rgba(0,0,0,.2);
 }
 
 .title{
   font-size:28px;
-  color:var(--pink2);
-  margin-bottom:10px;
+  color:#ff2d55;
 }
 
-.subtitle{
-  font-size:14px;
-  margin-bottom:14px;
-}
-
-/* ===== FIX ẢNH KHÔNG TRÀN ===== */
+/* Ảnh ẩn ban đầu */
 .photo{
   width:100%;
   max-width:420px;
-  margin:0 auto 16px;
-  border-radius:18px;
+  margin:15px auto;
+  border-radius:20px;
   overflow:hidden;
-  box-shadow:0 12px 30px rgba(0,0,0,.15);
-
-  max-height:min(55vh,520px);   /* quan trọng */
+  max-height:55vh;
+  display:none;                 /* ẨN */
+  opacity:0;
+  transition:0.8s;
 }
 
 .photo img{
   width:100%;
   height:100%;
-  object-fit:cover;             /* không méo */
-  display:block;
+  object-fit:cover;
 }
 
-/* ===== BUTTON ===== */
-.row{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
+/* Lời chúc ẩn ban đầu */
+#message{
+  display:none;                 /* ẨN */
+  margin-top:15px;
+  padding:12px;
+  border-radius:15px;
+  background:#fff;
+  white-space:pre-line;
+  opacity:0;
+  transition:0.8s;
 }
 
 button{
-  padding:10px 18px;
+  padding:12px 20px;
   border:none;
   border-radius:30px;
+  font-size:15px;
   cursor:pointer;
-  font-size:14px;
-  background:linear-gradient(45deg,var(--pink),var(--pink2));
+  background:linear-gradient(45deg,#ff4b5c,#ff2d55);
   color:white;
   transition:0.3s;
 }
 
 button:hover{
-  transform:scale(1.08);
+  transform:scale(1.1);
 }
 
-.btn-ghost{
-  background:#eee;
-  color:#333;
-}
-
-/* ===== MESSAGE ===== */
-#message{
-  margin-top:15px;
-  display:none;
-  padding:12px;
-  border-radius:14px;
-  background:#fff;
-  white-space:pre-line;
-}
-
-/* ===== FALLING HEART ===== */
+/* Heart */
 .heart{
   position:absolute;
   top:-10vh;
@@ -124,24 +92,6 @@ button:hover{
   0%{transform:translateY(-10vh);opacity:1;}
   100%{transform:translateY(110vh);opacity:0;}
 }
-
-/* ===== AUTOPLAY OVERLAY ===== */
-.autoplay-overlay{
-  position:fixed;
-  inset:0;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  background:rgba(0,0,0,.3);
-  z-index:999;
-}
-
-.autoplay-box{
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  text-align:center;
-}
 </style>
 </head>
 
@@ -149,75 +99,61 @@ button:hover{
 
 <div class="card">
   <h1 class="title">Happy Valentine 💕</h1>
-  <p class="subtitle">Ảnh và nhạc đã gắn sẵn</p>
 
-  <!-- ẢNH -->
-  <div class="photo">
+  <button onclick="showLove()">💌 Nhấn vào đây</button>
+
+  <!-- Ảnh -->
+  <div class="photo" id="photo">
     <img src="couple.jpg" alt="Our photo">
   </div>
 
-  <div class="row">
-    <button onclick="showMessage()">💌 Nhấn vào đây</button>
-    <button class="btn-ghost" onclick="toggleMusic()">🎵 Bật/Tắt</button>
+  <!-- Lời chúc -->
+  <div id="message">
+    Cảm ơn em vì đã chọn ở lại ❤️
+    Kể cả những lúc anh chưa đủ tốt 💕
+    Anh sẽ cố gắng mỗi ngày để xứng đáng với tình yêu của em 💖
   </div>
-
-  <div id="message"></div>
 </div>
 
-<!-- NHẠC -->
-<audio id="bgm" loop preload="auto">
+<!-- Nhạc -->
+<audio id="bgm" loop>
   <source src="Ta-La-Cua-Nhau.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Overlay nếu bị chặn autoplay -->
-<div class="autoplay-overlay" id="overlay">
-  <div class="autoplay-box">
-    <p>🎵 Nhấn để bật nhạc</p>
-    <button onclick="forcePlay()">Bật nhạc</button>
-  </div>
-</div>
-
 <script>
-const bgm = document.getElementById("bgm");
-const overlay = document.getElementById("overlay");
+const photo = document.getElementById("photo");
 const message = document.getElementById("message");
+const bgm = document.getElementById("bgm");
 
-/* ===== AUTOPLAY ===== */
-window.addEventListener("load",()=>{
-  bgm.play().catch(()=>{
-    overlay.style.display="flex";
-  });
-});
+function showLove(){
 
-function forcePlay(){
-  bgm.play();
-  overlay.style.display="none";
-}
+  // hiện ảnh
+  photo.style.display="block";
+  setTimeout(()=> photo.style.opacity="1",50);
 
-function toggleMusic(){
-  if(bgm.paused) bgm.play();
-  else bgm.pause();
-}
-
-/* ===== MESSAGE ===== */
-function showMessage(){
+  // hiện lời chúc
   message.style.display="block";
-  message.innerHTML=
-  "Chúc em một ngày Valentine thật ngọt ngào ❤️\n"+
-  "Cảm ơn vì đã xuất hiện trong cuộc đời anh 💖";
+  setTimeout(()=> message.style.opacity="1",200);
+
+  // chạy nhạc
+  bgm.play();
+
+  // tim rơi
+  startHearts();
 }
 
-/* ===== HEART FALL ===== */
-const hearts=["❤","💖","💕","💘","💞"];
-setInterval(()=>{
-  const heart=document.createElement("div");
-  heart.className="heart";
-  heart.innerHTML=hearts[Math.floor(Math.random()*hearts.length)];
-  heart.style.left=Math.random()*100+"vw";
-  heart.style.animationDuration=(Math.random()*3+2)+"s";
-  document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(),5000);
-},300);
+function startHearts(){
+  const hearts=["❤","💖","💕","💘","💞"];
+  setInterval(()=>{
+    const heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML=hearts[Math.floor(Math.random()*hearts.length)];
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=(Math.random()*3+2)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),5000);
+  },300);
+}
 </script>
 
 </body>
