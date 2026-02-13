@@ -31,7 +31,6 @@
       position:relative;
     }
 
-    /* subtle moving glow */
     body::before{
       content:"";
       position:absolute; inset:-30%;
@@ -43,7 +42,6 @@
     }
     @keyframes spin{ to{ transform: rotate(360deg); } }
 
-    /* floating bokeh */
     .bokeh{
       position:absolute; inset:0;
       pointer-events:none;
@@ -64,7 +62,6 @@
       100%{ transform: translateY(-20vh) scale(1.35); opacity:0; }
     }
 
-    /* card */
     .card{
       width:min(520px, 92vw);
       padding:34px 30px 26px;
@@ -85,7 +82,6 @@
       100%{ transform: translateY(0) scale(1); opacity:1; }
     }
 
-    /* decorative border glow */
     .card::before{
       content:"";
       position:absolute; inset:-2px;
@@ -118,7 +114,6 @@
       line-height:1.4;
     }
 
-    /* optional photo */
     .photo{
       width: 100%;
       max-width: 420px;
@@ -146,7 +141,6 @@
       pointer-events:none;
     }
 
-    /* buttons */
     .row{
       display:flex;
       gap:10px;
@@ -186,7 +180,6 @@
       box-shadow: 0 18px 38px rgba(0,0,0,.12);
     }
 
-    /* message reveal */
     #message{
       margin-top:18px;
       padding:14px 14px;
@@ -198,13 +191,13 @@
       background: linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.45));
       border:1px solid rgba(255,255,255,.7);
       animation: fadeUp .55s ease both;
+      white-space: pre-line;
     }
     @keyframes fadeUp{
       from{ opacity:0; transform: translateY(8px); }
       to{ opacity:1; transform: translateY(0); }
     }
 
-    /* typewriter cursor */
     .cursor{
       display:inline-block;
       width:10px;
@@ -213,7 +206,6 @@
     }
     @keyframes blink{ 50%{ opacity:0; } }
 
-    /* falling hearts */
     .heart{
       position:absolute;
       z-index:1;
@@ -230,7 +222,6 @@
       100%{ transform: translateY(115vh) translateX(var(--drift)) rotate(360deg) scale(1.15); opacity:0; }
     }
 
-    /* click sparkle */
     .sparkle{
       position:absolute;
       width:10px; height:10px;
@@ -246,14 +237,43 @@
       100%{ transform: translate(calc(-50% + var(--sx)), calc(-50% + var(--sy))) scale(0); opacity:0; }
     }
 
-    /* small footer note */
     .hint{
       margin-top: 10px;
       font-size: 12.5px;
       color: rgba(20,20,20,.55);
     }
 
-    /* reduce motion */
+    /* Overlay bật nhạc nếu autoplay bị chặn */
+    .autoplay-overlay{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background: rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+    }
+    .autoplay-box{
+      width:min(420px, 92vw);
+      background: rgba(255,255,255,.9);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius: 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.18);
+      padding: 18px 18px 14px;
+      text-align:center;
+    }
+    .autoplay-box h3{
+      margin: 4px 0 8px;
+      color: var(--pink2);
+      font-size: 18px;
+    }
+    .autoplay-box p{
+      margin: 0 0 12px;
+      color: rgba(0,0,0,.65);
+      font-size: 13.5px;
+      line-height:1.35;
+    }
+
     @media (prefers-reduced-motion: reduce){
       *{ animation: none !important; transition: none !important; }
       body::before{ display:none; }
@@ -263,22 +283,18 @@
 
 <body>
 
-  <!-- bokeh bubbles -->
   <div class="bokeh" id="bokeh"></div>
 
   <div class="card" id="card">
     <h1 class="title">Happy Valentine 💕</h1>
     <p class="subtitle">
       Một chút lung linh cho ngày đặc biệt ✨<br/>
-      (Bạn có thể thay ảnh bên dưới bằng ảnh của hai bạn nhé!)
+      (Ảnh + nhạc đã gắn sẵn)
     </p>
 
-    <!-- ✅ THÊM ẢNH: đổi src thành ảnh bạn muốn -->
+    <!-- ✅ ẢNH CỦA BẠN: đặt file couple.jpg cùng thư mục -->
     <div class="photo">
-      <img
-        src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1200&q=80"
-        alt="Valentine photo"
-      />
+      <img src="couple.jpg" alt="Our photo" />
     </div>
 
     <div class="row">
@@ -291,23 +307,52 @@
     <div class="hint">Tip: click vào nền để có “sparkle” ✨</div>
   </div>
 
-  <!-- nhạc nền nhẹ (tùy chọn). Nếu không muốn, xóa audio + nút toggleMusic -->
-  <audio id="bgm" loop>
-    <!-- Bạn có thể thay src bằng file mp3 của bạn (local hoặc online). -->
-    <!-- <source src="your-music.mp3" type="audio/mpeg"> -->
+  <!-- ✅ NHẠC CỦA BẠN: đặt file Ta-La-Cua-Nhau.mp3 cùng thư mục -->
+  <audio id="bgm" loop preload="auto">
+    <source src="Ta-La-Cua-Nhau.mp3" type="audio/mpeg">
   </audio>
+
+  <!-- Overlay nếu autoplay bị chặn -->
+  <div class="autoplay-overlay" id="autoplayOverlay">
+    <div class="autoplay-box">
+      <h3>🎵 Bật nhạc nè</h3>
+      <p>Trình duyệt đang chặn tự phát nhạc. Bạn chạm 1 cái là nhạc chạy ngay.</p>
+      <button onclick="forcePlay()">▶️ Bật nhạc</button>
+    </div>
+  </div>
 
   <script>
     const messageEl = document.getElementById("message");
     const bgm = document.getElementById("bgm");
     const bokeh = document.getElementById("bokeh");
+    const overlay = document.getElementById("autoplayOverlay");
+
+    // ========== cố autoplay khi mở trang ==========
+    async function tryAutoplay(){
+      try{
+        // cố play ngay khi load
+        await bgm.play();
+        overlay.style.display = "none";
+      }catch(e){
+        // bị chặn -> hiện overlay để user click 1 cái
+        overlay.style.display = "flex";
+      }
+    }
+
+    function forcePlay(){
+      bgm.play().then(()=>{
+        overlay.style.display = "none";
+      }).catch(()=>{});
+    }
+
+    window.addEventListener("load", tryAutoplay);
 
     // ========== BOKEH INIT ==========
     (function initBokeh(){
       const n = 18;
       for(let i=0;i<n;i++){
         const s = document.createElement("span");
-        const size = Math.random()*18 + 10; // 10..28
+        const size = Math.random()*18 + 10;
         s.style.width = size + "px";
         s.style.height = size + "px";
         s.style.left = Math.random()*100 + "vw";
@@ -338,18 +383,20 @@
       }, speed);
     }
 
-    // ========== SHOW MESSAGE + CONFETTI HEARTS ==========
+    // ========== SHOW MESSAGE ==========
     function showMessage(){
       const text =
         "Chúc em một ngày Valentine thật ngọt ngào ❤️\n" +
         "Cảm ơn vì đã xuất hiện trong cuộc đời anh!\n" +
         "Mong mình sẽ có thật nhiều kỷ niệm đẹp cùng nhau 💖";
       typeWriter(messageEl, text, 22);
-      // small heart burst
       burst(26);
+
+      // nếu nhạc chưa chạy vì bị chặn, click nút này cũng được tính là tương tác
+      bgm.play().catch(()=>{ overlay.style.display = "flex"; });
     }
 
-    // ========== FALLING HEARTS (continuous) ==========
+    // ========== FALLING HEARTS ==========
     const hearts = ["❤","💗","💖","💘","💕","💞","💓","💝"];
     function createHeart(){
       const heart = document.createElement("div");
@@ -357,13 +404,13 @@
       heart.textContent = hearts[Math.floor(Math.random()*hearts.length)];
 
       const left = Math.random()*100;
-      const duration = Math.random()*3.2 + 3.2;  // 3.2..6.4s
-      const drift = (Math.random()*160 - 80).toFixed(0) + "px"; // -80..80px
+      const duration = Math.random()*3.2 + 3.2;
+      const drift = (Math.random()*160 - 80).toFixed(0) + "px";
 
       heart.style.left = left + "vw";
       heart.style.animationDuration = duration + "s";
       heart.style.setProperty("--drift", drift);
-      heart.style.fontSize = (Math.random()*18 + 16).toFixed(0) + "px"; // 16..34
+      heart.style.fontSize = (Math.random()*18 + 16).toFixed(0) + "px";
       heart.style.opacity = (Math.random()*0.55 + 0.45).toFixed(2);
 
       document.body.appendChild(heart);
@@ -408,7 +455,6 @@
     }
 
     document.addEventListener("click", (e)=>{
-      // tránh spam sparkle khi click nút
       const tag = (e.target.tagName || "").toLowerCase();
       if(tag === "button") return;
       sparklesAt(e.clientX, e.clientY);
@@ -416,20 +462,13 @@
 
     // ========== MUSIC TOGGLE ==========
     function toggleMusic(){
-      // Lưu ý: trình duyệt thường chặn autoplay; user click nút là OK.
-      if(!bgm.src){
-        alert("Bạn chưa gắn file nhạc. Mở code và thêm src cho <audio> nhé!");
-        return;
-      }
-      if(bgm.paused) bgm.play();
+      if(bgm.paused) bgm.play().catch(()=>{ overlay.style.display = "flex"; });
       else bgm.pause();
     }
 
-    // optional: start gentle sparkles occasionally
+    // optional: sparkles
     setInterval(()=>{
-      const x = Math.random()*window.innerWidth;
-      const y = Math.random()*window.innerHeight;
-      sparklesAt(x, y);
+      sparklesAt(Math.random()*innerWidth, Math.random()*innerHeight);
     }, 2500);
   </script>
 </body>
