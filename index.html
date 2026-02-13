@@ -300,7 +300,6 @@ button:active{ transform: translateY(0) scale(.99); }
       <h1 class="title">Happy Valentine 💕</h1>
       <p class="subtitle">
         Nhấn nút để “mở thiệp” ✨<br/>
-        (Trên điện thoại sẽ cuộn mượt, không cần zoom)
       </p>
     </div>
 
@@ -311,7 +310,7 @@ button:active{ transform: translateY(0) scale(.99); }
 
       <div id="message"></div>
 
-      <div class="hint">Tip: bạn có thể cuộn để xem hết lời chúc 💖</div>
+      <!-- <div class="hint">Tip: bạn có thể cuộn để xem hết lời chúc 💖</div> -->
     </div>
 
     <div class="card-footer">
@@ -418,7 +417,7 @@ function openCard(){
   const text =
     "Cảm ơn em vì đã chọn ở lại ❤️\n" +
     "Kể cả những lúc anh chưa tốt 💕\n" +
-    "Anh sẽ cố gắng mỗi ngày để xứng đáng với tình yêu của em 💖";
+    "Anh sẽ cố gắng mỗi ngày để yêu của em nhiều hơn 💖";
   typeWriter(messageEl, text, 20);
 
   // auto scroll xuống để thấy lời chúc (FIX: khỏi zoom)
@@ -503,7 +502,7 @@ const wishTexts = [
   "Ta là của nhau 💕",
   "Valentine vui vẻ ❤️",
   "Yêu em nhiều lắm 💖",
-  "Cảm ơn em vì ở lại 💗",
+  "Cảm ơn em đã ở bên Anh 💗",
   "Mãi bên nhau nhé 💘"
 ];
 function spawnWish(){
@@ -524,3 +523,4 @@ function startWishFly(){
 
 </body>
 </html>
+
