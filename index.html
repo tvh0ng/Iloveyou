@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Valentine 💕</title>
 
 <style>
@@ -12,7 +12,7 @@
   --shadow:0 20px 60px rgba(0,0,0,.18);
 }
 
-*{box-sizing:border-box;}
+*{ box-sizing:border-box; }
 
 body{
   margin:0;
@@ -29,7 +29,7 @@ body{
   position:relative;
 }
 
-/* glow moving */
+/* moving glow */
 body::before{
   content:"";
   position:absolute; inset:-30%;
@@ -42,13 +42,14 @@ body::before{
   opacity:.5;
   pointer-events:none;
 }
-@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes spin{ to{ transform: rotate(360deg); } }
 
 /* bokeh */
 .bokeh{ position:absolute; inset:0; pointer-events:none; z-index:0; }
 .bokeh span{
   position:absolute;
-  width:14px; height:14px; border-radius:999px;
+  width:14px; height:14px;
+  border-radius:999px;
   background: rgba(255,255,255,.45);
   animation: floatUp linear infinite;
   opacity:.8;
@@ -93,9 +94,9 @@ body::before{
   line-height:1.35;
 }
 
-/* Image: nhỏ, không che nhiều */
+/* image (small) */
 .photo{
-  width: min(300px, 70vw);      /* nhỏ hơn */
+  width: min(280px, 70vw);
   margin: 12px auto 12px;
   border-radius: 18px;
   overflow:hidden;
@@ -104,21 +105,15 @@ body::before{
 
   display:none;
   opacity:0;
-  transform: translateY(8px) scale(.98);
+  transform: translateY(10px) scale(.98);
   transition: .8s ease;
 }
-.photo.show{
-  display:block;
-}
+.photo.show{ display:block; }
 .photo.show.fadein{
   opacity:1;
   transform: translateY(0) scale(1);
 }
-.photo img{
-  width:100%;
-  height: auto;                 /* giữ tỉ lệ */
-  display:block;
-}
+.photo img{ width:100%; height:auto; display:block; }
 
 /* buttons */
 .row{
@@ -156,9 +151,7 @@ button:active{ transform: translateY(0) scale(.99); }
   border: 1px solid rgba(255,255,255,.85);
   box-shadow: 0 12px 26px rgba(0,0,0,.08);
 }
-.btn-ghost:hover{
-  box-shadow: 0 18px 38px rgba(0,0,0,.12);
-}
+.btn-ghost:hover{ box-shadow: 0 18px 38px rgba(0,0,0,.12); }
 
 /* message */
 #message{
@@ -186,7 +179,7 @@ button:active{ transform: translateY(0) scale(.99); }
 }
 @keyframes blink{ 50%{ opacity:0; } }
 
-/* hearts falling */
+/* hearts rain */
 .heart{
   position:absolute;
   z-index:1;
@@ -203,7 +196,7 @@ button:active{ transform: translateY(0) scale(.99); }
   100%{ transform: translateY(115vh) translateX(var(--drift)) rotate(360deg) scale(1.12); opacity:0; }
 }
 
-/* burst hearts from center */
+/* burst hearts */
 .burst{
   position:fixed;
   left:50%; top:50%;
@@ -220,6 +213,28 @@ button:active{ transform: translateY(0) scale(.99); }
 @keyframes burst{
   0%{ transform: translate(0,0) scale(.7); opacity:1; }
   100%{ transform: translate(var(--x), var(--y)) scale(1.1); opacity:0; }
+}
+
+/* floating wish text (chạy ra) */
+.wish{
+  position:fixed;
+  left:50%;
+  top:70%;
+  transform: translate(-50%,-50%);
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255,255,255,.95);
+  text-shadow: 0 10px 30px rgba(0,0,0,.25);
+  letter-spacing:.2px;
+  pointer-events:none;
+  z-index:6;
+  white-space: nowrap;
+  animation: wishFly 1400ms ease-out forwards;
+}
+@keyframes wishFly{
+  0%{ opacity:0; transform: translate(-50%, 20px) scale(.92); }
+  10%{ opacity:1; }
+  100%{ opacity:0; transform: translate(-50%, -140px) scale(1.06); }
 }
 
 /* sparkle click */
@@ -244,7 +259,7 @@ button:active{ transform: translateY(0) scale(.99); }
   color: rgba(0,0,0,.55);
 }
 
-/* overlay autoplay */
+/* autoplay overlay */
 .autoplay-overlay{
   position:fixed; inset:0;
   display:none;
@@ -277,7 +292,7 @@ button:active{ transform: translateY(0) scale(.99); }
 
 @media (max-height:700px){
   .card{ padding:18px 16px 14px; }
-  .photo{ width:min(260px, 68vw); }
+  .photo{ width:min(250px, 68vw); }
   .subtitle{ margin-bottom:6px; }
 }
 </style>
@@ -290,7 +305,7 @@ button:active{ transform: translateY(0) scale(.99); }
     <h1 class="title">Happy Valentine 💕</h1>
     <p class="subtitle">
       Nhấn nút để “mở thiệp” ✨<br/>
-      (Có nút dừng nhạc/tiếp tục)
+      (Bùng nổ luôn + lời chúc bay ra liên tục)
     </p>
 
     <!-- Ảnh: ẩn ban đầu -->
@@ -301,7 +316,6 @@ button:active{ transform: translateY(0) scale(.99); }
     <div class="row">
       <button id="btnLove" onclick="openCard()">💌 Nhấn vào đây</button>
       <button class="btn-ghost" id="btnMusic" onclick="toggleMusic()">⏸ Dừng nhạc</button>
-      <button class="btn-ghost" onclick="burstHearts()">💥 Bùng nổ</button>
     </div>
 
     <div id="message"></div>
@@ -331,9 +345,11 @@ const btnMusic = document.getElementById("btnMusic");
 
 const hearts = ["❤","💗","💖","💘","💕","💞","💓","💝"];
 let heartsInterval = null;
+let burstInterval = null;
+let wishInterval = null;
 let opened = false;
 
-// bokeh init
+/* bokeh init */
 (function initBokeh(){
   const bokeh = document.getElementById("bokeh");
   const n = 18;
@@ -350,7 +366,7 @@ let opened = false;
   }
 })();
 
-// autoplay try
+/* autoplay try */
 window.addEventListener("load", async ()=>{
   try{
     await bgm.play();
@@ -369,7 +385,7 @@ function forcePlay(){
   }).catch(()=>{});
 }
 
-// typewriter
+/* typewriter */
 function typeWriter(el, text, speed=22){
   el.classList.add("show");
   el.innerHTML = "";
@@ -388,15 +404,15 @@ function typeWriter(el, text, speed=22){
     }
   }, speed);
 
-  // fade in
   requestAnimationFrame(()=> el.classList.add("fadein"));
 }
 
+/* open card */
 function openCard(){
   if(opened) return;
   opened = true;
 
-  // show photo with animation
+  // show photo
   photo.classList.add("show");
   requestAnimationFrame(()=> photo.classList.add("fadein"));
 
@@ -407,19 +423,17 @@ function openCard(){
     "Anh sẽ cố gắng mỗi ngày để xứng đáng với tình yêu của em 💖";
   typeWriter(messageEl, text, 22);
 
-  // music play (in case blocked)
-  bgm.play().then(()=>{
-    btnMusic.textContent = "⏸ Dừng nhạc";
-  }).catch(()=>{
-    overlay.style.display="flex";
-    btnMusic.textContent = "▶️ Bật nhạc";
-  });
+  // play music (user gesture)
+  bgm.play().then(()=> btnMusic.textContent="⏸ Dừng nhạc")
+    .catch(()=>{ overlay.style.display="flex"; btnMusic.textContent="▶️ Bật nhạc"; });
 
-  // effects
-  burstHearts(22);
+  // always-on effects
   startHeartsRain();
+  startAlwaysBurst();
+  startWishFly();
 }
 
+/* music toggle */
 function toggleMusic(){
   if(bgm.paused){
     bgm.play().then(()=>{
@@ -435,7 +449,7 @@ function toggleMusic(){
   }
 }
 
-// hearts rain
+/* hearts rain */
 function startHeartsRain(){
   if(heartsInterval) return;
   heartsInterval = setInterval(createHeart, 220);
@@ -459,8 +473,8 @@ function createHeart(){
   setTimeout(()=> heart.remove(), duration*1000 + 300);
 }
 
-// burst hearts
-function burstHearts(count=18){
+/* burst hearts */
+function burstHearts(count=14){
   const container = document.createElement("div");
   container.className = "burst";
   document.body.appendChild(container);
@@ -470,16 +484,51 @@ function burstHearts(count=18){
     sp.textContent = hearts[Math.floor(Math.random()*hearts.length)];
     sp.style.setProperty("--x", (Math.random()*420 - 210).toFixed(0) + "px");
     sp.style.setProperty("--y", (Math.random()*340 - 170).toFixed(0) + "px");
-    sp.style.fontSize = (Math.random()*12 + 18).toFixed(0) + "px";
+    sp.style.fontSize = (Math.random()*10 + 18).toFixed(0) + "px";
     container.appendChild(sp);
   }
-
   setTimeout(()=> container.remove(), 950);
 }
 
-// click sparkles
+/* ALWAYS burst (liên tục) */
+function startAlwaysBurst(){
+  if(burstInterval) return;
+  // nổ 1 lần ngay + nổ đều đều
+  burstHearts(18);
+  burstInterval = setInterval(()=> burstHearts(14), 900);
+}
+
+/* wish fly text (lời chúc chạy ra) */
+const wishTexts = [
+  "Ta là của nhau 💕",
+  "Valentine vui vẻ ❤️",
+  "Yêu em nhiều lắm 💖",
+  "Cảm ơn em vì ở lại 💗",
+  "Mãi bên nhau nhé 💘"
+];
+
+function spawnWish(){
+  const w = document.createElement("div");
+  w.className = "wish";
+  w.textContent = wishTexts[Math.floor(Math.random()*wishTexts.length)];
+
+  // random vị trí ngang một chút
+  const x = 50 + (Math.random()*24 - 12); // 38..62%
+  w.style.left = x + "%";
+
+  document.body.appendChild(w);
+  setTimeout(()=> w.remove(), 1500);
+}
+
+function startWishFly(){
+  if(wishInterval) return;
+  spawnWish();
+  wishInterval = setInterval(spawnWish, 850);
+}
+
+/* click sparkles */
 function sparklesAt(x, y){
-  const n = 12;
+  const n = 10;
   for(let i=0;i<n;i++){
     const sp = document.createElement("div");
     sp.className = "sparkle";
@@ -493,17 +542,11 @@ function sparklesAt(x, y){
     setTimeout(()=> sp.remove(), 750);
   }
 }
-
 document.addEventListener("click",(e)=>{
   const tag = (e.target.tagName || "").toLowerCase();
   if(tag === "button") return;
   sparklesAt(e.clientX, e.clientY);
 });
-
-// gentle sparkles
-setInterval(()=>{
-  sparklesAt(Math.random()*innerWidth, Math.random()*innerHeight);
-}, 2600);
 </script>
 
 </body>
